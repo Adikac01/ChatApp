@@ -3,6 +3,7 @@
 using boost::asio::ip::tcp;
 int main() {
     try {
+        setbuf(stdout, nullptr);
         boost::asio::io_context ioContext;
 
         tcp::acceptor acceptor(ioContext, tcp::endpoint(tcp::v4(), 1337));
@@ -13,6 +14,7 @@ int main() {
             tcp::socket socket(ioContext);
             acceptor.accept(socket);
 
+            std::cout << "Client connected! Sending message\n";
             std::string helloMessage = "Hello dear, old sport\n";
             boost::system::error_code error;
 

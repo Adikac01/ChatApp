@@ -161,7 +161,7 @@ build ChatClient/CMakeFiles/ChatClient.dir/__/ChatNetworking/src/Base.cpp.obj: C
 
 build ChatClient/ChatClient.exe: CXX_EXECUTABLE_LINKER__ChatClient_Debug ChatClient/CMakeFiles/ChatClient.dir/main.cpp.obj ChatClient/CMakeFiles/ChatClient.dir/__/ChatNetworking/src/Base.cpp.obj | ChatNetworking/libChatNetworking.a || ChatNetworking/libChatNetworking.a
   FLAGS = -g
-  LINK_LIBRARIES = ChatNetworking/libChatNetworking.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_LIBRARIES = ChatNetworking/libChatNetworking.a  -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = ChatClient\CMakeFiles\ChatClient.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
