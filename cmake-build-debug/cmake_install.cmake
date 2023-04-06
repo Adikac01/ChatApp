@@ -39,6 +39,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("C:/Users/434578/CLionProjects/ChatApp/cmake-build-debug/ChatNetworking/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("C:/Users/434578/CLionProjects/ChatApp/cmake-build-debug/ChatClient/cmake_install.cmake")
 endif()
 

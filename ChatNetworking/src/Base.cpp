@@ -3,9 +3,3 @@
 //
 
 #include <ChatNetworking/Base.h>
-
-enum class MyEnum{
-    One,
-    Two,
-    Three
-};

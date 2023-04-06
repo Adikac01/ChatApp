@@ -1,5 +1,8 @@
 C:/Users/434578/CLionProjects/ChatApp/cmake-build-debug/CMakeFiles/edit_cache.dir
 C:/Users/434578/CLionProjects/ChatApp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/434578/CLionProjects/ChatApp/cmake-build-debug/ChatNetworking/CMakeFiles/ChatNetworking.dir
+C:/Users/434578/CLionProjects/ChatApp/cmake-build-debug/ChatNetworking/CMakeFiles/edit_cache.dir
+C:/Users/434578/CLionProjects/ChatApp/cmake-build-debug/ChatNetworking/CMakeFiles/rebuild_cache.dir
 C:/Users/434578/CLionProjects/ChatApp/cmake-build-debug/ChatClient/CMakeFiles/ChatClient.dir
 C:/Users/434578/CLionProjects/ChatApp/cmake-build-debug/ChatClient/CMakeFiles/edit_cache.dir
 C:/Users/434578/CLionProjects/ChatApp/cmake-build-debug/ChatClient/CMakeFiles/rebuild_cache.dir
