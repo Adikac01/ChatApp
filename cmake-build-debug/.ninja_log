@@ -1,0 +1,5 @@
+# ninja log v5
+0	624	7024880287574668	ChatClient/CMakeFiles/ChatClient.dir/main.cpp.obj	1697c66431dc090f
+627	770	7024880288989657	ChatClient/ChatClient.exe	a969ffbfa3eab63c
+1	431	7024880431516676	ChatServer/CMakeFiles/ChatServer.dir/main.cpp.obj	a9ca14feac714035
+431	544	7024880432622981	ChatServer/ChatServer.exe	d95ae0688631678c
