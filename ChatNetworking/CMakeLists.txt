@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(Boost 1.81.0 REQUIRED)
 
-file(GLOB SOURCES src/* src/*/* src/*/*/*)
-add_library(${PROJECT_NAME} ${SOURCES} src/TcpConnection.cpp include/ChatNetworking/TcpConnection.h)
+file(GLOB_RECURSE SOURCES src/*.cpp)
+add_library(${PROJECT_NAME} ${SOURCES})
 
 
 target_include_directories(${PROJECT_NAME}

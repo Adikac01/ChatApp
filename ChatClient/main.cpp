@@ -1,6 +1,7 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include <array>
+#include <ChatNetworking/client/TCPClient.h>
 
 namespace asio = boost::asio;
 namespace sys = boost::system;

@@ -77,19 +77,19 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 build cmake_object_order_depends_target_ChatNetworking: phony || ChatNetworking/CMakeFiles/ChatNetworking.dir
 
-build ChatNetworking/CMakeFiles/ChatNetworking.dir/src/TCPServer.cpp.obj: CXX_COMPILER__ChatNetworking_Debug C$:/Users/434578/CLionProjects/ChatApp/ChatNetworking/src/TCPServer.cpp || cmake_object_order_depends_target_ChatNetworking
-  DEP_FILE = ChatNetworking\CMakeFiles\ChatNetworking.dir\src\TCPServer.cpp.obj.d
+build ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TCPServer.cpp.obj: CXX_COMPILER__ChatNetworking_Debug C$:/Users/434578/CLionProjects/ChatApp/ChatNetworking/src/server/TCPServer.cpp || cmake_object_order_depends_target_ChatNetworking
+  DEP_FILE = ChatNetworking\CMakeFiles\ChatNetworking.dir\src\server\TCPServer.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always
   INCLUDES = -IC:/Users/434578/CLionProjects/ChatApp/ChatNetworking/include -I"C:/Program Files/boost_1_81_0"
   OBJECT_DIR = ChatNetworking\CMakeFiles\ChatNetworking.dir
-  OBJECT_FILE_DIR = ChatNetworking\CMakeFiles\ChatNetworking.dir\src
+  OBJECT_FILE_DIR = ChatNetworking\CMakeFiles\ChatNetworking.dir\src\server
 
-build ChatNetworking/CMakeFiles/ChatNetworking.dir/src/TcpConnection.cpp.obj: CXX_COMPILER__ChatNetworking_Debug C$:/Users/434578/CLionProjects/ChatApp/ChatNetworking/src/TcpConnection.cpp || cmake_object_order_depends_target_ChatNetworking
-  DEP_FILE = ChatNetworking\CMakeFiles\ChatNetworking.dir\src\TcpConnection.cpp.obj.d
+build ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TcpConnection.cpp.obj: CXX_COMPILER__ChatNetworking_Debug C$:/Users/434578/CLionProjects/ChatApp/ChatNetworking/src/server/TcpConnection.cpp || cmake_object_order_depends_target_ChatNetworking
+  DEP_FILE = ChatNetworking\CMakeFiles\ChatNetworking.dir\src\server\TcpConnection.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always
   INCLUDES = -IC:/Users/434578/CLionProjects/ChatApp/ChatNetworking/include -I"C:/Program Files/boost_1_81_0"
   OBJECT_DIR = ChatNetworking\CMakeFiles\ChatNetworking.dir
-  OBJECT_FILE_DIR = ChatNetworking\CMakeFiles\ChatNetworking.dir\src
+  OBJECT_FILE_DIR = ChatNetworking\CMakeFiles\ChatNetworking.dir\src\server
 
 
 # =============================================================================
@@ -99,7 +99,7 @@ build ChatNetworking/CMakeFiles/ChatNetworking.dir/src/TcpConnection.cpp.obj: CX
 #############################################
 # Link the static library ChatNetworking\libChatNetworking.a
 
-build ChatNetworking/libChatNetworking.a: CXX_STATIC_LIBRARY_LINKER__ChatNetworking_Debug ChatNetworking/CMakeFiles/ChatNetworking.dir/src/TCPServer.cpp.obj ChatNetworking/CMakeFiles/ChatNetworking.dir/src/TcpConnection.cpp.obj
+build ChatNetworking/libChatNetworking.a: CXX_STATIC_LIBRARY_LINKER__ChatNetworking_Debug ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TCPServer.cpp.obj ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TcpConnection.cpp.obj
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = ChatNetworking\CMakeFiles\ChatNetworking.dir
   POST_BUILD = cd .
