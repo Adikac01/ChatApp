@@ -10,7 +10,7 @@ namespace Chat {
         V4,
         V6
     };
-    using boost::asio::ip::tcp;
+    using asio::ip::tcp;
     class TCPServer {
     public:
         //Constructors
@@ -26,7 +26,7 @@ namespace Chat {
         IPV _ipVersion;
         int _port;
 
-        boost::asio::io_context _ioContext;
+        asio::io_context _ioContext;
         tcp::acceptor _acceptor;
 
         std::vector<TCPConnection::pointer> _connections {};
