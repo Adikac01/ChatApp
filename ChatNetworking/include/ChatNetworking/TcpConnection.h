@@ -20,8 +20,8 @@ namespace Chat {
             return _socket;
         }
 
-        void Start();
-        void Post(const std::string& message);
+        void start();
+        void post(const std::string& message);
 
 
     private:

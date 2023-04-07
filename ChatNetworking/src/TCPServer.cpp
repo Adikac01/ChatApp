@@ -20,19 +20,32 @@ namespace Chat {
         return 0;
     }
 
+    void TCPServer::Broadcast(const std::string &message) {
+        for(auto& connection : _connections){
+            connection->post(message);
+        }
+    }
+
     void TCPServer::startAccept() {
         _socket.emplace(_ioContext);
 
         //asynchronously accept a connection
         _acceptor.async_accept(*_socket,[this](const boost::system::error_code& error){
             auto connection = TCPConnection::Create(std::move(*_socket));
+
+            if(OnJoin){
+                OnJoin(connection);
+            }
+
             _connections.insert(connection);
             if(!error){
-                connection->Start();
+                connection->start();
             }else{
 
             }
             startAccept();
         });
     }
+
+
 }

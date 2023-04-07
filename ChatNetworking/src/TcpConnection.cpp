@@ -10,12 +10,17 @@ namespace Chat {
         _username = name.str();
     }
 
-    void TCPConnection::Start() {
+    void TCPConnection::start() {
         asyncRead();
     }
 
-    void TCPConnection::Post(const std::string &message) {
+    void TCPConnection::post(const std::string &message) {
+        bool queueIdle = _outgoingMessages.empty();
+        _outgoingMessages.push(message);
 
+        if(queueIdle){
+            asyncWrite();
+        }
     }
 
     void TCPConnection::asyncRead() {
@@ -35,20 +40,40 @@ namespace Chat {
         }
 
         std::stringstream msg;
-        msg << _username << ": " << std::istream(&_streamBuf).rdbuf();
+        std::time_t localTime = std::time(nullptr);
+        tm *tmTime = std::localtime(&localTime);
+        auto resolveTime = [](int time){
+            std::stringstream buf;
+            time < 10 ? buf << "0" << time : buf << time;
+            return buf.str();
+        };
+        msg << "[" << resolveTime(tmTime->tm_hour) << ":" << resolveTime(tmTime->tm_min) << ":" << resolveTime(tmTime->tm_sec)
+            << "] " << _username << ": " << std::istream(&_streamBuf).rdbuf();
         _streamBuf.consume(bytesTransferred);
 
-        std::cout << msg.str() << std::endl;
+        std::cout << msg.str();
 
         asyncRead();
     }
 
     void TCPConnection::asyncWrite() {
-
+        asio::async_write(_socket, asio::buffer(_outgoingMessages.front()),
+                          [self = shared_from_this()] (sys::error_code error, size_t bytesTransferred){
+                                   self->onWrite(error,bytesTransferred);
+                               });
     }
 
     void TCPConnection::onWrite(sys::error_code error, size_t bytesTransferred) {
+        if(error){
+            _socket.close();
 
+            //add an error handler
+            return;
+        }
+        _outgoingMessages.pop();
+        if(!_outgoingMessages.empty()){
+            asyncWrite();
+        }
     }
 
 

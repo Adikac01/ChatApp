@@ -14,6 +14,10 @@ namespace Chat {
     };
     using asio::ip::tcp;
     class TCPServer {
+        using OnJoinHandler = std::function<void(TCPConnection::pointer)>;
+        using OnLeaveHandler = std::function<void(TCPConnection::pointer)>;
+        using OnClientMessageHanler = std::function<void(std::string)>;
+
     public:
         //Constructors
         TCPServer(IPV ipv, int port);
@@ -21,8 +25,13 @@ namespace Chat {
         //Functions
         int run();
 
+        OnJoinHandler OnJoin;
+        OnLeaveHandler OnLeave;
+        OnClientMessageHanler OnClientMessage;
+
     private:
         void startAccept();
+        void Broadcast(const std::string &message);
 
     private:
         IPV _ipVersion;
