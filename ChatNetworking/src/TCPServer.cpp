@@ -1,6 +1,7 @@
 #include <iostream>
 #include "ChatNetworking/TCPServer.h"
 #include "ChatNetworking/TcpConnection.h"
+#include <memory>
 
 
 namespace Chat {
@@ -20,11 +21,12 @@ namespace Chat {
     }
 
     void TCPServer::startAccept() {
-        auto connection = TCPConnection::Create(_ioContext);
-        _connections.push_back(connection);
+        _socket.emplace(_ioContext);
+
         //asynchronously accept a connection
-        _acceptor.async_accept(connection->getSocket(),
-                               [connection, this](const boost::system::error_code& error){
+        _acceptor.async_accept(*_socket,[this](const boost::system::error_code& error){
+            auto connection = TCPConnection::Create(std::move(*_socket));
+            _connections.insert(connection);
             if(!error){
                 connection->Start();
             }else{
