@@ -1,20 +1,12 @@
-//
-// Created by 434578 on 07.04.2023.
-//
-
-#include <utility>
 #include <iostream>
-
 #include "ChatNetworking/TCPServer.h"
 #include "ChatNetworking/TcpConnection.h"
+
 
 namespace Chat {
     using asio::ip::tcp;
     TCPServer::TCPServer(IPV ipv, int port) : _ipVersion(ipv), _port(port),
-        _acceptor(_ioContext, tcp::endpoint(_ipVersion == IPV::V4 ? tcp::v4() : tcp::v6(), _port)) {
-
-
-    }
+        _acceptor(_ioContext, tcp::endpoint(_ipVersion == IPV::V4 ? tcp::v4() : tcp::v6(), _port)){}
 
     int TCPServer::run(){
         try {
@@ -41,5 +33,4 @@ namespace Chat {
             startAccept();
         });
     }
-
 }

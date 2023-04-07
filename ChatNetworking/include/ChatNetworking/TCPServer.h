@@ -3,7 +3,6 @@
 #include <boost/asio.hpp>
 #include <ChatNetworking/TcpConnection.h>
 
-#pragma once
 
 namespace Chat {
     enum class IPV{
@@ -31,6 +30,6 @@ namespace Chat {
 
         std::vector<TCPConnection::pointer> _connections {};
     };
-}
+}//Chat
 
 #endif //CHATAPP_TCPSERVER_H
