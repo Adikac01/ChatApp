@@ -6,14 +6,12 @@ using boost::asio::ip::tcp;
 int main(int argc, char* argv[]) {
     try{
         boost::asio::io_context ioContext;
-
         tcp::resolver resolver {ioContext};
 
         auto endpoints = resolver.resolve("127.0.0.1", "1337");
 
         tcp::socket socket{ioContext};
         boost::asio::connect(socket, endpoints);
-
 
         while(true){
             //Listen for messages
@@ -31,7 +29,6 @@ int main(int argc, char* argv[]) {
 
             std::cout.write(buf.data(), len);
         }
-
 
     }catch (std::exception& e){
         std::cerr << e.what() << std::endl;

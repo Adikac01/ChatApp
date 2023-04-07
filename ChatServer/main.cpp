@@ -1,27 +1,11 @@
 #include <iostream>
 #include <boost/asio.hpp>
+#include <ChatNetworking/TCPServer.h>
 using boost::asio::ip::tcp;
 int main() {
-    try {
-        setbuf(stdout, nullptr);
-        boost::asio::io_context ioContext;
 
-        tcp::acceptor acceptor(ioContext, tcp::endpoint(tcp::v4(), 1337));
+    Chat::TCPServer server{Chat::IPV::V4, 1337};
 
-        while (true) {
-            std::cout << "Accepting connections on port 1337\n";
-
-            tcp::socket socket(ioContext);
-            acceptor.accept(socket);
-
-            std::cout << "Client connected! Sending message\n";
-            std::string helloMessage = "Hello dear, old sport\n";
-            boost::system::error_code error;
-
-            boost::asio::write(socket, boost::asio::buffer(helloMessage), error);
-        }
-    }catch(std::exception& e){
-        std::cerr << e.what() << std::endl;
-   }
+    server.run();
     return 0;
 }
