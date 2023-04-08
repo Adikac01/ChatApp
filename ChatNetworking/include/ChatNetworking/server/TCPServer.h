@@ -5,6 +5,7 @@
 #include <functional>
 #include <optional>
 #include <unordered_set>
+#include <vector>
 
 
 namespace Chat {
@@ -18,6 +19,7 @@ namespace Chat {
         using OnLeaveHandler = std::function<void(TCPConnection::pointer)>;
         using OnClientMessageHanler = std::function<void(std::string)>;
         using OnUsernameSetHandler = std::function<void(std::string,TCPConnection::pointer)>;
+        using AllConnectionsHandler = std::function<std::vector<std::string>>;
 
     public:
         //Constructors
@@ -26,6 +28,7 @@ namespace Chat {
         //Functions
         int run();
 
+        void Commands(const std::string &message);
         void Broadcast(const std::string &message, const TCPConnection::pointer& ptr = nullptr);
 
         OnJoinHandler OnJoin;

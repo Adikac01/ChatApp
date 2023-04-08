@@ -26,6 +26,12 @@ namespace Chat {
             if(connection != ptr) connection->post(message);
         }
     }
+    void TCPServer::Commands(const std::string &message) {
+
+
+
+    }
+
 
     void TCPServer::startAccept() {
         _socket.emplace(_ioContext);

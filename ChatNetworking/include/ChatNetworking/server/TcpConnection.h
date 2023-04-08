@@ -16,6 +16,9 @@ namespace Chat {
     public:
         using pointer = std::shared_ptr<TCPConnection>;
         using UsernameHandler = std::function<void(std::string, pointer)>;
+        using MessageHandler = std::function<void(std::string)>;
+        using ErrorHandler = std::function<void()>;
+        using AllConnectionsHandler = std::function<std::vector<std::string>()>;
         static pointer Create(tcp::socket&& socket){
             //return std::make_shared<TCPConnection>(ioContext);
             return pointer(new TCPConnection(std::move(socket)));
@@ -29,7 +32,8 @@ namespace Chat {
 
 
 
-        void start(MessageHandler&& messageHandler, ErrorHandler&& errorHandler, UsernameHandler&& usernameHandler);
+        void start(MessageHandler&& messageHandler, ErrorHandler&& errorHandler,
+                   UsernameHandler&& usernameHandler, AllConnectionsHandler&& connectionsHandler);
         void post(const std::string& message);
         void getStarted();
 

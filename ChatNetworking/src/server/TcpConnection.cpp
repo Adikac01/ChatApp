@@ -62,6 +62,8 @@ namespace Chat {
     }
 
 
+
+
     void TCPConnection::onRead(sys::error_code error, size_t bytesTransferred) {
         if(error){
             _socket.close();
@@ -69,27 +71,64 @@ namespace Chat {
             _errorHandler();
             return;
         }
-        std::stringstream msg;
-        std::time_t localTime = std::time(nullptr);
-        tm *tmTime = std::localtime(&localTime);
-        auto resolveTime = [](int time){
-            std::stringstream buf;
-            time < 10 ? buf << "0" << time : buf << time;
-            return buf.str();
-        };
-        auto timeBuffer= [&resolveTime](tm* t){
-            std::stringstream buffer;
-            buffer << "[" << resolveTime(t->tm_hour) << ":" << resolveTime(t->tm_min) << ":" << resolveTime(t->tm_sec)  << "] " ;
-            return buffer.str();
-        };
-        msg << timeBuffer(tmTime) << _username << ": " << std::istream(&_streamBuf).rdbuf();
+//
+//        std::basic_streambuf<char> *message= (std::istream(&_streamBuf).rdbuf());
+//        std::cout<<&message<<std::endl;
+        std::stringstream message;
+        message << std::istream(&_streamBuf).rdbuf();
+        std::cout << message.str();
+        std::string msg_str = message.str();
+        msg_str.substr(0,msg_str.size()-1);
 
-        _streamBuf.consume(bytesTransferred);
+        if(msg_str[0]=='\\')
+        {
+            if(msg_str=="\\users\n")
+            {
+                std::vector<std::string> users = _connectionsHandler();
 
-        std::cout << msg.str();
+                std::string tmp;
+                for(const auto& user : users)
+                {
+                    std::cout<<user<<std::endl;
+                    tmp+=user+"\n";
 
-        _messageHandler(msg.str());
-        asyncRead();
+                }
+                std::cout<<users.size();
+
+                asio::async_write(_socket, asio::buffer(tmp),
+                                  [self = shared_from_this()] (sys::error_code error, size_t bytesTransferred){
+                                      if(!error){
+                                      }
+                                  });
+
+            }
+            asyncRead();
+        }else {
+
+            std::stringstream msg;
+            std::time_t localTime = std::time(nullptr);
+            tm *tmTime = std::localtime(&localTime);
+            auto resolveTime = [](int time) {
+                std::stringstream buf;
+                time < 10 ? buf << "0" << time : buf << time;
+                return buf.str();
+            };
+            auto timeBuffer = [&resolveTime](tm *t) {
+                std::stringstream buffer;
+                buffer << "[" << resolveTime(t->tm_hour) << ":" << resolveTime(t->tm_min) << ":"
+                       << resolveTime(t->tm_sec) << "] ";
+                return buffer.str();
+            };
+            msg << timeBuffer(tmTime) << _username << ": " << message.str();
+
+            _streamBuf.consume(bytesTransferred);
+
+            std::cout << msg.str();
+
+            _messageHandler(msg.str());
+            asyncRead();
+
+        }
     }
 
     void TCPConnection::asyncWrite() {
