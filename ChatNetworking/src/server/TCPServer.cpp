@@ -57,7 +57,7 @@ namespace Chat {
                         },
                         [this](){
                             std::vector<std::string> users{};
-                            for(auto connection : _connections){
+                            for(const auto& connection : _connections){
                                 if(connection->checkUsernameInitialized()){
                                     users.push_back(connection->getUsername());
                                 }

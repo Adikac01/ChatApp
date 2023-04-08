@@ -35,6 +35,7 @@ namespace Chat {
         void post(const std::string& message);
         void getStarted();
         bool checkUsernameInitialized() const {return _usernameInitialized;}
+        void initializeName() {_usernameInitialized = true;};
 
 
     private:

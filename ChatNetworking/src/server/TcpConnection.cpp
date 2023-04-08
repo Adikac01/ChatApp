@@ -37,6 +37,7 @@ namespace Chat {
     void TCPConnection::onUsernameSet() {
         std::string msg = "User " + _username + " has joined the chat!\n";
         _usernameHandler(msg, shared_from_this());
+        initializeName();
     }
 
     void TCPConnection::start(MessageHandler&& messageHandler,ErrorHandler&& errorHandler,
@@ -78,24 +79,19 @@ namespace Chat {
 //        std::cout<<&message<<std::endl;
         std::stringstream message;
         message << std::istream(&_streamBuf).rdbuf();
-        std::cout << message.str();
         std::string msg_str = message.str();
-        msg_str.substr(0,msg_str.size()-1);
 
         if(msg_str[0]=='\\')
         {
             if(msg_str=="\\users\n")
             {
-                std::vector<std::string> users = _connectionsHandler();
+                std::vector<std::string> users = (_connectionsHandler());
 
-                std::string tmp;
+                std::string tmp = "List of users:\n";
                 for(const auto& user : users)
                 {
-                    std::cout<<user<<std::endl;
                     tmp+=user+"\n";
-
                 }
-                std::cout<<users.size();
 
                 asio::async_write(_socket, asio::buffer(tmp),
                                   [self = shared_from_this()] (sys::error_code error, size_t bytesTransferred){
