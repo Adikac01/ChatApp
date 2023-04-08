@@ -37,7 +37,6 @@ namespace Chat {
         if(error){
             _socket.close();
 
-
             _errorHandler();
             return;
         }

@@ -1,11 +1,20 @@
 # ninja log v5
 20	5471	7026123418143807	ChatNetworking/CMakeFiles/ChatNetworking.dir/src/TcpConnection.cpp.obj	fec375b8c0f89acb
-6482	7423	7026126366605968	ChatClient/ChatClient.exe	4d30b6fdf890e0f5
-21	6481	7026126357175991	ChatClient/CMakeFiles/ChatClient.dir/main.cpp.obj	9ec2afb792da40a1
-6932	8532	7026124384863924	ChatServer/ChatServer.exe	4be38cac7bedf534
-13	5744	7026124356989196	ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TCPServer.cpp.obj	8e7c714614da7f97
-5744	6932	7026124368913937	ChatNetworking/libChatNetworking.a	c1a194c2bd119bb9
+41	4784	7026580686524863	ChatClient/CMakeFiles/ChatClient.dir/main.cpp.obj	9ec2afb792da40a1
+22	1819	7026581340802322	ChatClient/ChatClient.exe	4d30b6fdf890e0f5
+1	385	7026581435977789	build.ninja	245ac7a128b2bdbc
 14	5894	7026123422343806	ChatNetworking/CMakeFiles/ChatNetworking.dir/src/TCPServer.cpp.obj	99048584a00abf69
-2	365	7026127602742105	build.ninja	245ac7a128b2bdbc
+13	5744	7026124356989196	ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TCPServer.cpp.obj	8e7c714614da7f97
+7206	9503	7026581224351093	ChatNetworking/libChatNetworking.a	ee36eee1eacbb5c6
+6932	8532	7026124384863924	ChatServer/ChatServer.exe	4be38cac7bedf534
 24	4784	7026123411289025	ChatServer/CMakeFiles/ChatServer.dir/main.cpp.obj	8fd34baac145ab12
-18	5221	7026124351764300	ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TcpConnection.cpp.obj	4f21c3eee957730d
+30	5285	7026580691529864	ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TcpConnection.cpp.obj	4f21c3eee957730d
+16	7204	7026581201216537	ChatNetworking/CMakeFiles/ChatNetworking.dir/src/client/TcpClient.cpp.obj	42b86fbc221337eb
+22	7214	7026581201356140	ChatClient/CMakeFiles/ChatClient.dir/__/ChatNetworking/src/client/TcpClient.cpp.obj	abaae92d1f285ed2
+14	1822	7026581584057964	ChatServer/ChatServer.exe	4be38cac7bedf534
+14	4210	7026586717041357	ChatClient/CMakeFiles/ChatClient.dir/main.cpp.obj	9ec2afb792da40a1
+4210	5814	7026586733058020	ChatClient/ChatClient.exe	4d30b6fdf890e0f5
+14	4404	7026588919823520	ChatServer/CMakeFiles/ChatServer.dir/main.cpp.obj	8fd34baac145ab12
+4405	6012	7026588935851153	ChatServer/ChatServer.exe	4be38cac7bedf534
+17	4332	7026589024253072	ChatClient/CMakeFiles/ChatClient.dir/main.cpp.obj	9ec2afb792da40a1
+4333	5917	7026589040082136	ChatClient/ChatClient.exe	4d30b6fdf890e0f5

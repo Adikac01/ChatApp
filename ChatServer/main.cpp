@@ -4,7 +4,7 @@
 using boost::asio::ip::tcp;
 int main() {
 
-    Chat::TCPServer server{Chat::IPV::V4, 1337};
+    Chat::TCPServer server{Chat::IPV::V4, 41480};
 
     server.OnJoin = [](Chat::TCPConnection::pointer server){
         std::cout << server->getUsername() << " has joined the server\n";
