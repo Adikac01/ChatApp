@@ -65,3 +65,16 @@
 4795	7112	7026839723202076	ChatNetworking/libChatNetworking.a	ee36eee1eacbb5c6
 7113	8697	7026839738971145	ChatClient/ChatClient.exe	4d30b6fdf890e0f5
 14	2336	7026839871551679	ChatServer/ChatServer.exe	4be38cac7bedf534
+25	5810	7026851824508777	ChatServer/CMakeFiles/ChatServer.dir/main.cpp.obj	8fd34baac145ab12
+19	6811	7026851834373784	ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TcpConnection.cpp.obj	4f21c3eee957730d
+14	7184	7026851838248755	ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TCPServer.cpp.obj	8e7c714614da7f97
+7185	9706	7026851863518766	ChatNetworking/libChatNetworking.a	ee36eee1eacbb5c6
+9706	11536	7026851881738840	ChatServer/ChatServer.exe	4be38cac7bedf534
+22	2023	7026851928854292	ChatClient/ChatClient.exe	4d30b6fdf890e0f5
+36	7449	7026861953566512	ChatServer/CMakeFiles/ChatServer.dir/main.cpp.obj	8fd34baac145ab12
+28	8667	7026861965731182	ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TcpConnection.cpp.obj	4f21c3eee957730d
+20	9235	7026861971426222	ChatNetworking/CMakeFiles/ChatNetworking.dir/src/server/TCPServer.cpp.obj	8e7c714614da7f97
+9236	12723	7026862006341202	ChatNetworking/libChatNetworking.a	ee36eee1eacbb5c6
+12724	15173	7026862030811179	ChatServer/ChatServer.exe	4be38cac7bedf534
+15	4439	7026868069301660	ChatServer/CMakeFiles/ChatServer.dir/main.cpp.obj	8fd34baac145ab12
+4440	6182	7026868086701676	ChatServer/ChatServer.exe	4be38cac7bedf534

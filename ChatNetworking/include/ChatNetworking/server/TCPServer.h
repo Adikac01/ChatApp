@@ -17,7 +17,7 @@ namespace Chat {
         using OnJoinHandler = std::function<void(TCPConnection::pointer)>;
         using OnLeaveHandler = std::function<void(TCPConnection::pointer)>;
         using OnClientMessageHanler = std::function<void(std::string)>;
-        using OnUsernameSetHandler = std::function<void(std::string)>;
+        using OnUsernameSetHandler = std::function<void(std::string,TCPConnection::pointer)>;
 
     public:
         //Constructors
@@ -26,11 +26,12 @@ namespace Chat {
         //Functions
         int run();
 
-        void Broadcast(const std::string &message);
+        void Broadcast(const std::string &message, const TCPConnection::pointer& ptr = nullptr);
 
         OnJoinHandler OnJoin;
         OnLeaveHandler OnLeave;
         OnClientMessageHanler OnClientMessage;
+        OnUsernameSetHandler OnUsernameSet;
 
     private:
         void startAccept();

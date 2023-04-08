@@ -10,13 +10,19 @@ int main() {
         std::cout << client->getUsername() << " has joined the server\n";
     };
 
-    server.OnLeave = [](Chat::TCPConnection::pointer client){
+    server.OnLeave = [&server](Chat::TCPConnection::pointer client){
         std::cout << client->getUsername() << " has left the server\n";
+        std::string msg = client->getUsername() + " has left the chat\n";
+        server.Broadcast(msg);
     };
 
     server.OnClientMessage = [&server](const std::string& message){
         //Parse the messege
         server.Broadcast(message);
+    };
+
+    server.OnUsernameSet = [&server](const std::string& message, const Chat::TCPConnection::pointer& ptr){
+        server.Broadcast(message,ptr);
     };
 
     server.run();

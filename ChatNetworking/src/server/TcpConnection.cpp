@@ -35,12 +35,14 @@ namespace Chat {
     }
 
     void TCPConnection::onUsernameSet() {
-        //_server->OnUsernameSet(msg, this);
+        std::string msg = "User " + _username + " has joined the chat!\n";
+        _usernameHandler(msg, shared_from_this());
     }
 
-    void TCPConnection::start(MessageHandler&& messageHandler,ErrorHandler&& errorHandler) {
+    void TCPConnection::start(MessageHandler&& messageHandler,ErrorHandler&& errorHandler, UsernameHandler&& usernameHandler) {
         _messageHandler = std::move(messageHandler);
         _errorHandler = std::move(errorHandler);
+        _usernameHandler = std::move(usernameHandler);
         getStarted();
     }
 

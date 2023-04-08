@@ -2,6 +2,7 @@
 #include "ChatNetworking/server/TCPServer.h"
 #include "ChatNetworking/server/TcpConnection.h"
 #include <memory>
+#include <utility>
 
 
 namespace Chat {
@@ -20,9 +21,9 @@ namespace Chat {
         return 0;
     }
 
-    void TCPServer::Broadcast(const std::string &message) {
+    void TCPServer::Broadcast(const std::string &message, const TCPConnection::pointer& ptr) {
         for(auto& connection : _connections){
-            connection->post(message);
+            if(connection != ptr) connection->post(message);
         }
     }
 
@@ -44,7 +45,8 @@ namespace Chat {
                             if(auto shared = weak.lock(); shared && _connections.erase(shared)){
                                 if(OnLeave) OnLeave(shared);
                             }
-                        }
+                        },
+                        [this](const std::string& message,TCPConnection::pointer ptr){if(OnUsernameSet) OnUsernameSet(message,std::move(ptr));}
                         );
             }else{
 

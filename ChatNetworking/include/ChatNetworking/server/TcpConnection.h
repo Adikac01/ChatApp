@@ -15,6 +15,7 @@ namespace Chat {
     class TCPConnection : public std::enable_shared_from_this<TCPConnection> {
     public:
         using pointer = std::shared_ptr<TCPConnection>;
+        using UsernameHandler = std::function<void(std::string, pointer)>;
         static pointer Create(tcp::socket&& socket){
             //return std::make_shared<TCPConnection>(ioContext);
             return pointer(new TCPConnection(std::move(socket)));
@@ -28,7 +29,7 @@ namespace Chat {
 
 
 
-        void start(MessageHandler&& messageHandler, ErrorHandler&& errorHandler);
+        void start(MessageHandler&& messageHandler, ErrorHandler&& errorHandler, UsernameHandler&& usernameHandler);
         void post(const std::string& message);
         void getStarted();
 
@@ -51,12 +52,15 @@ namespace Chat {
     private:
         tcp::socket _socket;
         std::string _username;
+        bool usernameInitialized = false;
 
         std::queue<std::string> _outgoingMessages;
         asio::streambuf _streamBuf {65536};
 
         MessageHandler _messageHandler;
         ErrorHandler  _errorHandler;
+        UsernameHandler _usernameHandler;
+
 
 
     };
