@@ -1,5 +1,6 @@
 #include <iostream>
 #include "ChatNetworking/server/TcpConnection.h"
+#include <windows.h>
 
 
 namespace Chat {
@@ -10,16 +11,42 @@ namespace Chat {
         _username = name.str();
     }
 
+    void TCPConnection::getStarted() {
+        asio::async_write(_socket, asio::buffer("Set your username:\n"),
+                          [self = shared_from_this()] (sys::error_code error, size_t bytesTransferred){
+                              if(!error){
+                                  self->readUsername();
+                              }
+                          });
+    }
+
+    void TCPConnection::readUsername() {
+        asio::async_read(_socket, _streamBuf, asio::transfer_at_least(1),
+                         [self = shared_from_this()](const sys::error_code& error, size_t bytesTransferred){
+                             if(!error){
+                                 std::string username = asio::buffer_cast<const char*>(self->_streamBuf.data());
+                                 username = username.substr(0, username.size()-1); // remove trailing newline
+                                 self->_username = username;
+                                 self->_streamBuf.consume(bytesTransferred);
+                                 self->onUsernameSet();
+                                 self->asyncRead();
+                             }
+                         });
+    }
+
+    void TCPConnection::onUsernameSet() {
+        //_server->OnUsernameSet(msg, this);
+    }
+
     void TCPConnection::start(MessageHandler&& messageHandler,ErrorHandler&& errorHandler) {
         _messageHandler = std::move(messageHandler);
         _errorHandler = std::move(errorHandler);
-        asyncRead();
+        getStarted();
     }
 
     void TCPConnection::post(const std::string &message) {
         bool queueIdle = _outgoingMessages.empty();
         _outgoingMessages.push(message);
-
         if(queueIdle){
             asyncWrite();
         }
@@ -40,7 +67,6 @@ namespace Chat {
             _errorHandler();
             return;
         }
-
         std::stringstream msg;
         std::time_t localTime = std::time(nullptr);
         tm *tmTime = std::localtime(&localTime);
@@ -54,7 +80,8 @@ namespace Chat {
             buffer << "[" << resolveTime(t->tm_hour) << ":" << resolveTime(t->tm_min) << ":" << resolveTime(t->tm_sec)  << "] " ;
             return buffer.str();
         };
-        msg << timeBuffer(tmTime)<< _username << ": " << std::istream(&_streamBuf).rdbuf();
+        msg << timeBuffer(tmTime) << _username << ": " << std::istream(&_streamBuf).rdbuf();
+
         _streamBuf.consume(bytesTransferred);
 
         std::cout << msg.str();

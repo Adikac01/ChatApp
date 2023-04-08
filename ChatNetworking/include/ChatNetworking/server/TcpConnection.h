@@ -30,6 +30,8 @@ namespace Chat {
 
         void start(MessageHandler&& messageHandler, ErrorHandler&& errorHandler);
         void post(const std::string& message);
+        void getStarted();
+
 
 
     private:
@@ -42,6 +44,9 @@ namespace Chat {
         void asyncWrite();
         void onWrite(sys::error_code error, size_t bytesTransferred);
 
+        void readUsername();
+        void onUsernameSet();
+
 
     private:
         tcp::socket _socket;
@@ -52,6 +57,8 @@ namespace Chat {
 
         MessageHandler _messageHandler;
         ErrorHandler  _errorHandler;
+
+
     };
 } // Chat
 

@@ -17,6 +17,7 @@ namespace Chat {
         using OnJoinHandler = std::function<void(TCPConnection::pointer)>;
         using OnLeaveHandler = std::function<void(TCPConnection::pointer)>;
         using OnClientMessageHanler = std::function<void(std::string)>;
+        using OnUsernameSetHandler = std::function<void(std::string)>;
 
     public:
         //Constructors

@@ -4,14 +4,14 @@
 using boost::asio::ip::tcp;
 int main() {
 
-    Chat::TCPServer server{Chat::IPV::V4, 41480};
+    Chat::TCPServer server{Chat::IPV::V4, 1337};
 
-    server.OnJoin = [](Chat::TCPConnection::pointer server){
-        std::cout << server->getUsername() << " has joined the server\n";
+    server.OnJoin = [](Chat::TCPConnection::pointer client){
+        std::cout << client->getUsername() << " has joined the server\n";
     };
 
-    server.OnLeave = [](Chat::TCPConnection::pointer server){
-        std::cout << server->getUsername() << " has left the server\n";
+    server.OnLeave = [](Chat::TCPConnection::pointer client){
+        std::cout << client->getUsername() << " has left the server\n";
     };
 
     server.OnClientMessage = [&server](const std::string& message){

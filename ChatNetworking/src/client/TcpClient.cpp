@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ChatNetworking/client/TcpClient.h"
 
 namespace Chat {
@@ -29,7 +30,6 @@ namespace Chat {
     void TCPClient::Post(const std::string &message) {
         bool queueIdle = _outgoingMessages.empty();
         _outgoingMessages.push(message);
-
         if(queueIdle){
             asyncWrite();
         }
@@ -55,7 +55,7 @@ namespace Chat {
 
     void TCPClient::asyncWrite() {
         asio::async_write(_socket, asio::buffer(_outgoingMessages.front()), [this](sys::error_code error, size_t bytesTransferred){
-            onRead(error, bytesTransferred);
+            onWrite(error, bytesTransferred);
         });
     }
 
