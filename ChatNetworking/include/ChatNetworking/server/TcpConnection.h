@@ -9,8 +9,6 @@ namespace Chat {
     namespace asio = boost::asio;
     namespace sys = boost::system;
     using asio::ip::tcp;
-    using MessageHandler = std::function<void(std::string)>;
-    using ErrorHandler = std::function<void()>;
 
     class TCPConnection : public std::enable_shared_from_this<TCPConnection> {
     public:
@@ -36,7 +34,7 @@ namespace Chat {
                    UsernameHandler&& usernameHandler, AllConnectionsHandler&& connectionsHandler);
         void post(const std::string& message);
         void getStarted();
-
+        bool checkUsernameInitialized() const {return _usernameInitialized;}
 
 
     private:
@@ -56,7 +54,7 @@ namespace Chat {
     private:
         tcp::socket _socket;
         std::string _username;
-        bool usernameInitialized = false;
+        bool _usernameInitialized = false;
 
         std::queue<std::string> _outgoingMessages;
         asio::streambuf _streamBuf {65536};
@@ -64,7 +62,7 @@ namespace Chat {
         MessageHandler _messageHandler;
         ErrorHandler  _errorHandler;
         UsernameHandler _usernameHandler;
-
+        AllConnectionsHandler _connectionsHandler;
 
 
     };

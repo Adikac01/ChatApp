@@ -39,10 +39,12 @@ namespace Chat {
         _usernameHandler(msg, shared_from_this());
     }
 
-    void TCPConnection::start(MessageHandler&& messageHandler,ErrorHandler&& errorHandler, UsernameHandler&& usernameHandler) {
+    void TCPConnection::start(MessageHandler&& messageHandler,ErrorHandler&& errorHandler,
+                              UsernameHandler&& usernameHandler, AllConnectionsHandler&& connectionsHandler) {
         _messageHandler = std::move(messageHandler);
         _errorHandler = std::move(errorHandler);
         _usernameHandler = std::move(usernameHandler);
+        _connectionsHandler = std::move(connectionsHandler);
         getStarted();
     }
 

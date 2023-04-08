@@ -52,7 +52,19 @@ namespace Chat {
                                 if(OnLeave) OnLeave(shared);
                             }
                         },
-                        [this](const std::string& message,TCPConnection::pointer ptr){if(OnUsernameSet) OnUsernameSet(message,std::move(ptr));}
+                        [this](const std::string& message,TCPConnection::pointer ptr){
+                            if(OnUsernameSet) OnUsernameSet(message,std::move(ptr));
+                        },
+                        [this](){
+                            std::vector<std::string> users{};
+                            for(auto connection : _connections){
+                                if(connection->checkUsernameInitialized()){
+                                    users.push_back(connection->getUsername());
+                                }
+                            }
+                            return users;
+                        }
+
                         );
             }else{
 
