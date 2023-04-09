@@ -9,27 +9,32 @@ namespace Chat {
     namespace sys = boost::system;
     using asio::ip::tcp;
     using MessageHandler = std::function<void(std::string)>;
+
     class TCPClient {
     public:
-        TCPClient(const std::string& address, int port);
+        TCPClient(const std::string &address, int port);
 
         void run();
+
         void stop();
-        void Post(const std::string& message);
+
+        void Post(const std::string &message);
 
     private:
         void asyncRead();
+
         void onRead(sys::error_code error, size_t bytesTransferred);
 
 
         void asyncWrite();
+
         void onWrite(sys::error_code error, size_t bytesTransferred);
 
     public:
         MessageHandler OnMessage;
 
     private:
-        asio::io_context _ioContext {};
+        asio::io_context _ioContext{};
         tcp::socket _socket;
 
         tcp::resolver::results_type _endpoints;

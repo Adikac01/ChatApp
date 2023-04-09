@@ -7,14 +7,14 @@ add_executable(${PROJECT_NAME} main.cpp)
 
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
-            ChatNetworking
-            ws2_32
-            mswsock
+        ChatNetworking
+        ws2_32
+        mswsock
         PRIVATE
-            ws2_32
+        ws2_32
         )
 
 target_include_directories(${PROJECT_NAME}
         PUBLIC
-            ChatNetworking
+        ChatNetworking
         )

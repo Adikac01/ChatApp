@@ -1,5 +1,6 @@
 #ifndef CHATAPP_TCPCONNECTION_H
 #define CHATAPP_TCPCONNECTION_H
+
 #include <boost/asio.hpp>
 #include <memory>
 #include <queue>
@@ -10,6 +11,7 @@ namespace Chat {
     namespace sys = boost::system;
     using asio::ip::tcp;
 
+
     class TCPConnection : public std::enable_shared_from_this<TCPConnection> {
     public:
         using pointer = std::shared_ptr<TCPConnection>;
@@ -17,38 +19,45 @@ namespace Chat {
         using MessageHandler = std::function<void(std::string)>;
         using ErrorHandler = std::function<void()>;
         using AllConnectionsHandler = std::function<std::vector<std::string>()>;
-        static pointer Create(tcp::socket&& socket){
+
+        static pointer Create(tcp::socket &&socket) {
             //return std::make_shared<TCPConnection>(ioContext);
             return pointer(new TCPConnection(std::move(socket)));
         }
 
-        inline const std::string& getUsername() const{return _username;}
+        inline const std::string &getUsername() const { return _username; }
 
-        tcp::socket& getSocket(){
+        tcp::socket &getSocket() {
             return _socket;
         }
 
 
+        void start(MessageHandler &&messageHandler, ErrorHandler &&errorHandler,
+                   UsernameHandler &&usernameHandler, AllConnectionsHandler &&connectionsHandler);
 
-        void start(MessageHandler&& messageHandler, ErrorHandler&& errorHandler,
-                   UsernameHandler&& usernameHandler, AllConnectionsHandler&& connectionsHandler);
-        void post(const std::string& message);
+        void post(const std::string &message);
+
         void getStarted();
-        bool checkUsernameInitialized() const {return _usernameInitialized;}
-        void initializeName() {_usernameInitialized = true;};
+
+        bool checkUsernameInitialized() const { return _usernameInitialized; }
+
+        void initializeName() { _usernameInitialized = true; };
 
 
     private:
 
-        explicit TCPConnection(tcp::socket&& socket);
+        explicit TCPConnection(tcp::socket &&socket);
 
         void asyncRead();
+
         void onRead(sys::error_code error, size_t bytesTransferred);
 
         void asyncWrite();
+
         void onWrite(sys::error_code error, size_t bytesTransferred);
 
         void readUsername();
+
         void onUsernameSet();
 
 
@@ -58,10 +67,10 @@ namespace Chat {
         bool _usernameInitialized = false;
 
         std::queue<std::string> _outgoingMessages;
-        asio::streambuf _streamBuf {65536};
+        asio::streambuf _streamBuf{65536};
 
         MessageHandler _messageHandler;
-        ErrorHandler  _errorHandler;
+        ErrorHandler _errorHandler;
         UsernameHandler _usernameHandler;
         AllConnectionsHandler _connectionsHandler;
 

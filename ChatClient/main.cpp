@@ -5,20 +5,20 @@
 using namespace Chat;
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     TCPClient client{"localhost", 1337};
 
-    client.OnMessage = [](const std::string& message){
+    client.OnMessage = [](const std::string &message) {
         std::cout << message;
     };
 
-    std::thread t {[&client](){client.run();}};
+    std::thread t{[&client]() { client.run(); }};
 
-    while(true){
+    while (true) {
         std::string message;
         std::getline(std::cin, message);
 
-        if(message == "\\q") break;
+        if (message == "\\q") break;
 
         message += '\n';
 

@@ -9,8 +9,8 @@ namespace Chat {
     }
 
     void TCPClient::run() {
-        asio::async_connect(_socket,_endpoints, [this](sys::error_code error, tcp::endpoint ep){
-            if(!error){
+        asio::async_connect(_socket, _endpoints, [this](sys::error_code error, tcp::endpoint ep) {
+            if (!error) {
                 asyncRead();
             }
         });
@@ -22,7 +22,7 @@ namespace Chat {
         sys::error_code error;
         _socket.close(error);
 
-        if(error){
+        if (error) {
             //process error
         }
     }
@@ -30,19 +30,19 @@ namespace Chat {
     void TCPClient::Post(const std::string &message) {
         bool queueIdle = _outgoingMessages.empty();
         _outgoingMessages.push(message);
-        if(queueIdle){
+        if (queueIdle) {
             asyncWrite();
         }
     }
 
     void TCPClient::asyncRead() {
-        asio::async_read_until(_socket, _streamBuf, "\n", [this](sys::error_code error, size_t bytesTransferred){
-           onRead(error, bytesTransferred);
+        asio::async_read_until(_socket, _streamBuf, "\n", [this](sys::error_code error, size_t bytesTransferred) {
+            onRead(error, bytesTransferred);
         });
     }
 
     void TCPClient::onRead(sys::error_code error, size_t bytesTransferred) {
-        if(error){
+        if (error) {
             stop();
             return;
         }
@@ -54,20 +54,21 @@ namespace Chat {
     }
 
     void TCPClient::asyncWrite() {
-        asio::async_write(_socket, asio::buffer(_outgoingMessages.front()), [this](sys::error_code error, size_t bytesTransferred){
-            onWrite(error, bytesTransferred);
-        });
+        asio::async_write(_socket, asio::buffer(_outgoingMessages.front()),
+                          [this](sys::error_code error, size_t bytesTransferred) {
+                              onWrite(error, bytesTransferred);
+                          });
     }
 
     void TCPClient::onWrite(sys::error_code error, size_t bytesTransferred) {
-        if(error){
+        if (error) {
             stop();
             return;
         }
 
         _outgoingMessages.pop();
 
-        if(!_outgoingMessages.empty()){
+        if (!_outgoingMessages.empty()) {
             asyncWrite();
         }
     }
