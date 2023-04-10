@@ -75,9 +75,15 @@ namespace Chat {
         std::stringstream message;
         message << std::istream(&_streamBuf).rdbuf();
         std::string msg_str = message.str();
+        std::string cmd;
+        int i = 0;
+        while(i < msg_str.size() -1 && msg_str[i] != ' ' && msg_str[i] != '\n'){
+            cmd += msg_str[i++];
+        }
+        msg_str = msg_str.substr(i, msg_str.size() - 2);
 
-        if (msg_str[0] == '\\') {
-            if (msg_str == "\\users\n") {
+        if (cmd[0] == '\\') {
+            if (cmd == "\\users") {
                 std::vector<std::string> users = (_connectionsHandler());
 
                 std::string tmp = "List of users:\n";
@@ -90,6 +96,8 @@ namespace Chat {
                                       if (!error) {
                                       }
                                   });
+
+            }else if (cmd == "\\create_room"){
 
             }
             asyncRead();

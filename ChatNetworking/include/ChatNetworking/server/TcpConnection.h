@@ -7,6 +7,7 @@
 
 
 namespace Chat {
+
     namespace asio = boost::asio;
     namespace sys = boost::system;
     using asio::ip::tcp;
@@ -41,7 +42,7 @@ namespace Chat {
 
         bool checkUsernameInitialized() const { return _usernameInitialized; }
 
-        void initializeName() { _usernameInitialized = true; };
+        void initializeName() { _usernameInitialized = true;}
 
 
     private:
@@ -65,6 +66,7 @@ namespace Chat {
         tcp::socket _socket;
         std::string _username;
         bool _usernameInitialized = false;
+        std::weak_ptr<class TCPChatRoom> _chatRoom;
 
         std::queue<std::string> _outgoingMessages;
         asio::streambuf _streamBuf{65536};

@@ -9,7 +9,10 @@ namespace Chat {
     using asio::ip::tcp;
 
     TCPServer::TCPServer(IPV ipv, int port) : _ipVersion(ipv), _port(port),
-    _acceptor(_ioContext,tcp::endpoint(_ipVersion == IPV::V4 ? tcp::v4() : tcp::v6(),_port)) {}
+    _acceptor(_ioContext,tcp::endpoint(_ipVersion == IPV::V4 ? tcp::v4() : tcp::v6(),_port)) {
+        _generalRoom = TCPChatRoom::createRoom("\\General\\");
+        _chatRooms.emplace(_generalRoom);
+    }
 
     int TCPServer::run() {
         try {
@@ -44,7 +47,8 @@ namespace Chat {
                 OnJoin(connection);
             }
 
-            _connections.insert(connection);
+
+            _generalRoom->addConnection(connection);
             if (!error) {
                 connection->start(
                         [this](const std::string &message) { if (OnClientMessage) OnClientMessage(message); },
@@ -58,11 +62,15 @@ namespace Chat {
                         },
                         [this]() {
                             std::vector<std::string> users{};
-                            for (const auto &connection: _connections) {
-                                if (connection->checkUsernameInitialized()) {
-                                    users.push_back(connection->getUsername());
-                                }
+                            for (const auto &chatRoom: _chatRooms) {
+                                for(const auto &connection : chatRoom->getChatConnections())
+                                    if (connection->checkUsernameInitialized()) {
+                                        std::string user;
+                                        user += R"(\\\)" + chatRoom->getName() + ": ";
+                                        users.push_back(connection->getUsername());
+                                    }
                             }
+
                             return users;
                         }
 

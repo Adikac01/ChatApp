@@ -2,7 +2,7 @@
 #define CHATAPP_TCPSERVER_H
 
 #include <boost/asio.hpp>
-#include "TcpConnection.h"
+#include <ChatNetworking/server/TcpChatRoom.h>
 #include <functional>
 #include <optional>
 #include <unordered_set>
@@ -50,6 +50,8 @@ namespace Chat {
         tcp::acceptor _acceptor;
         std::optional<tcp::socket> _socket;
         std::unordered_set<TCPConnection::pointer> _connections{};
+        std::unordered_set<TCPChatRoom::pointer> _chatRooms{};
+        TCPChatRoom::pointer _generalRoom;
     };
 }//Chat
 
