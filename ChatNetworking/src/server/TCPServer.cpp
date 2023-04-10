@@ -63,12 +63,15 @@ namespace Chat {
                         [this]() {
                             std::vector<std::string> users{};
                             for (const auto &chatRoom: _chatRooms) {
-                                for(const auto &connection : chatRoom->getChatConnections())
-                                    if (connection->checkUsernameInitialized()) {
-                                        std::string user;
-                                        user += R"(\\\)" + chatRoom->getName() + ": ";
-                                        users.push_back(connection->getUsername());
-                                    }
+
+                                chatRoom->GetUsers(users);
+
+//                                for(const auto &connection : chatRoom->getChatConnections())
+//                                    if (connection->checkUsernameInitialized()) {
+//                                        std::string user;
+//                                        user += R"(\\\)" + chatRoom->getName() + ": ";
+//                                        users.push_back(connection->getUsername());
+//                                    }
                             }
 
                             return users;
