@@ -7,6 +7,7 @@
 
 
 namespace Chat {
+
     namespace asio = boost::asio;
     namespace sys = boost::system;
     using asio::ip::tcp;
@@ -15,10 +16,12 @@ namespace Chat {
     class TCPConnection : public std::enable_shared_from_this<TCPConnection> {
     public:
         using pointer = std::shared_ptr<TCPConnection>;
-        using UsernameHandler = std::function<void(std::string, pointer)>;
-        using MessageHandler = std::function<void(std::string)>;
-        using ErrorHandler = std::function<void()>;
+        using chatPointer = std::weak_ptr<class TCPChatRoom>;
+        using UsernameHandler = std::function<void(std::string, chatPointer)>;
+        using MessageHandler = std::function<void(std::string,chatPointer)>;
+        using ErrorHandler = std::function<void(const std::weak_ptr<TCPChatRoom>& chatRoom)>;
         using AllConnectionsHandler = std::function<std::vector<std::string>()>;
+        using ChatCreateHandler = std::function<void(std::string)>;
 
         static pointer Create(tcp::socket &&socket) {
             //return std::make_shared<TCPConnection>(ioContext);
@@ -33,7 +36,8 @@ namespace Chat {
 
 
         void start(MessageHandler &&messageHandler, ErrorHandler &&errorHandler,
-                   UsernameHandler &&usernameHandler, AllConnectionsHandler &&connectionsHandler);
+                   UsernameHandler &&usernameHandler, AllConnectionsHandler &&connectionsHandler,
+                   ChatCreateHandler &&chatCreateHandler);
 
         void post(const std::string &message);
 
@@ -41,7 +45,7 @@ namespace Chat {
 
         bool checkUsernameInitialized() const { return _usernameInitialized; }
 
-        void initializeName() { _usernameInitialized = true; };
+        void initializeName() { _usernameInitialized = true;}
 
 
     private:
@@ -65,6 +69,7 @@ namespace Chat {
         tcp::socket _socket;
         std::string _username;
         bool _usernameInitialized = false;
+        std::weak_ptr<class TCPChatRoom> _chatRoom;
 
         std::queue<std::string> _outgoingMessages;
         asio::streambuf _streamBuf{65536};
@@ -73,6 +78,7 @@ namespace Chat {
         ErrorHandler _errorHandler;
         UsernameHandler _usernameHandler;
         AllConnectionsHandler _connectionsHandler;
+        ChatCreateHandler _chatCreateHandler;
 
 
     };

@@ -2,7 +2,7 @@
 #define CHATAPP_TCPSERVER_H
 
 #include <boost/asio.hpp>
-#include "TcpConnection.h"
+#include <ChatNetworking/server/TcpChatRoom.h>
 #include <functional>
 #include <optional>
 #include <unordered_set>
@@ -18,10 +18,10 @@ namespace Chat {
 
     class TCPServer {
         using OnJoinHandler = std::function<void(TCPConnection::pointer)>;
-        using OnLeaveHandler = std::function<void(TCPConnection::pointer)>;
-        using OnClientMessageHanler = std::function<void(std::string)>;
-        using OnUsernameSetHandler = std::function<void(std::string, TCPConnection::pointer)>;
-        using AllConnectionsHandler = std::function<std::vector<std::string>>;
+        using OnLeaveHandler = std::function<void(TCPConnection::pointer, TCPChatRoom::pointer)>;
+        using OnClientMessageHanler = std::function<void(std::string, TCPChatRoom::pointer)>;
+        using OnUsernameSetHandler = std::function<void(std::string, TCPChatRoom::pointer)>;
+        using OnChatCreatedHandler = std::function<void(std::string)>;
 
     public:
         //Constructors
@@ -32,12 +32,13 @@ namespace Chat {
 
         void Commands(const std::string &message);
 
-        void Broadcast(const std::string &message, const TCPConnection::pointer &ptr = nullptr);
+        void Broadcast(const std::string &message, const TCPChatRoom::pointer &ptr = nullptr);
 
         OnJoinHandler OnJoin;
         OnLeaveHandler OnLeave;
         OnClientMessageHanler OnClientMessage;
         OnUsernameSetHandler OnUsernameSet;
+        OnChatCreatedHandler OnChatCreated;
 
     private:
         void startAccept();
@@ -50,6 +51,8 @@ namespace Chat {
         tcp::acceptor _acceptor;
         std::optional<tcp::socket> _socket;
         std::unordered_set<TCPConnection::pointer> _connections{};
+        std::unordered_set<TCPChatRoom::pointer> _chatRooms{};
+        TCPChatRoom::pointer _generalRoom;
     };
 }//Chat
 

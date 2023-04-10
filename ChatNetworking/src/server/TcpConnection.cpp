@@ -1,6 +1,5 @@
 #include <iostream>
 #include "ChatNetworking/server/TcpConnection.h"
-#include <windows.h>
 
 
 namespace Chat {
@@ -36,16 +35,18 @@ namespace Chat {
 
     void TCPConnection::onUsernameSet() {
         std::string msg = "User " + _username + " has joined the chat!\n";
-        _usernameHandler(msg, shared_from_this());
+        _usernameHandler(msg, _chatRoom);
         initializeName();
     }
 
     void TCPConnection::start(MessageHandler &&messageHandler, ErrorHandler &&errorHandler,
-                              UsernameHandler &&usernameHandler, AllConnectionsHandler &&connectionsHandler) {
+                              UsernameHandler &&usernameHandler, AllConnectionsHandler &&connectionsHandler,
+                              ChatCreateHandler &&chatCreateHandler) {
         _messageHandler = std::move(messageHandler);
         _errorHandler = std::move(errorHandler);
         _usernameHandler = std::move(usernameHandler);
         _connectionsHandler = std::move(connectionsHandler);
+        _chatCreateHandler = std::move(chatCreateHandler);
         getStarted();
     }
 
@@ -69,15 +70,21 @@ namespace Chat {
         if (error) {
             _socket.close();
 
-            _errorHandler();
+            _errorHandler(_chatRoom);
             return;
         }
         std::stringstream message;
         message << std::istream(&_streamBuf).rdbuf();
         std::string msg_str = message.str();
+        std::string cmd;
+        size_t i = 0;
+        while(i < msg_str.size() -1 && msg_str[i] != ' ' && msg_str[i] != '\n'){
+            cmd += msg_str[i++];
+        }
+        msg_str = msg_str.substr(std::min((i+1),(msg_str.size()-1)), std::max(i, msg_str.size() -2));
 
-        if (msg_str[0] == '\\') {
-            if (msg_str == "\\users\n") {
+        if (cmd[0] == '/') {
+            if (cmd == "/users") {
                 std::vector<std::string> users = (_connectionsHandler());
 
                 std::string tmp = "List of users:\n";
@@ -91,6 +98,8 @@ namespace Chat {
                                       }
                                   });
 
+            }else if (cmd == "/create_room"){
+                //TODO: Implement logic
             }
             asyncRead();
         } else {
@@ -115,7 +124,7 @@ namespace Chat {
 
             std::cout << msg.str();
 
-            _messageHandler(msg.str());
+            _messageHandler(msg.str(), _chatRoom);
             asyncRead();
 
         }
@@ -132,7 +141,7 @@ namespace Chat {
         if (error) {
             _socket.close();
 
-            _errorHandler();
+            _errorHandler(_chatRoom);
             return;
         }
         _outgoingMessages.pop();
