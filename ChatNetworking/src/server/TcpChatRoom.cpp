@@ -13,12 +13,18 @@ namespace Chat {
     }
 
     void TCPChatRoom::GetUsers(std::vector<std::string> &users) {
-        for(const auto &connection : this->getChatConnections())
+        for(const auto &connection : _connections)
             if (connection->checkUsernameInitialized()) {
                 std::string user;
                 user += R"(\\\)" + this->getName() + ": ";
                 users.push_back(connection->getUsername());
             }
+    }
+
+    void TCPChatRoom::Broadcast(const std::string& message){
+        for(const auto& connection : _connections){
+            connection->post(message);
+        }
     }
 
 

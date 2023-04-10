@@ -1,6 +1,5 @@
 #include <iostream>
 #include "ChatNetworking/server/TcpConnection.h"
-#include <windows.h>
 
 
 namespace Chat {
@@ -98,7 +97,7 @@ namespace Chat {
                                   });
 
             }else if (cmd == "\\create_room"){
-
+                //TODO: Implement logic
             }
             asyncRead();
         } else {
@@ -123,7 +122,7 @@ namespace Chat {
 
             std::cout << msg.str();
 
-            _messageHandler(msg.str());
+            _messageHandler(msg.str(), _chatRoom);
             asyncRead();
 
         }

@@ -25,13 +25,16 @@ namespace Chat {
         return 0;
     }
 
-    void TCPServer::Broadcast(const std::string &message, const TCPConnection::pointer &ptr) {
-        for (auto &connection: _connections) {
-            if (connection != ptr) connection->post(message);
+    void TCPServer::Broadcast(const std::string& message, const TCPChatRoom::pointer &ptr) {
+        if(ptr == nullptr){
+            _generalRoom->Broadcast(message);
+        }else{
+            ptr->Broadcast(message);
         }
     }
 
     void TCPServer::Commands(const std::string &message) {
+        //TODO
 
 
     }
@@ -51,29 +54,22 @@ namespace Chat {
             _generalRoom->addConnection(connection);
             if (!error) {
                 connection->start(
-                        [this](const std::string &message) { if (OnClientMessage) OnClientMessage(message); },
+                        [this](const std::string &message)
+                        //TODO: Change function to work with chatRoom pointer
+                        { if (OnClientMessage) OnClientMessage(message); },
                         [&, weak = std::weak_ptr(connection)] {
+                            //TODO: Make connections from chatrooms
                             if (auto shared = weak.lock(); shared && _connections.erase(shared)) {
                                 if (OnLeave) OnLeave(shared);
                             }
                         },
                         [this](const std::string &message, TCPConnection::pointer ptr) {
+                            //TODO: Change function to work with chatRoom pointer
                             if (OnUsernameSet) OnUsernameSet(message, std::move(ptr));
                         },
                         [this]() {
                             std::vector<std::string> users{};
-                            for (const auto &chatRoom: _chatRooms) {
-
-                                chatRoom->GetUsers(users);
-
-//                                for(const auto &connection : chatRoom->getChatConnections())
-//                                    if (connection->checkUsernameInitialized()) {
-//                                        std::string user;
-//                                        user += R"(\\\)" + chatRoom->getName() + ": ";
-//                                        users.push_back(connection->getUsername());
-//                                    }
-                            }
-
+                            for (const auto &chatRoom: _chatRooms) chatRoom->GetUsers(users);
                             return users;
                         }
 

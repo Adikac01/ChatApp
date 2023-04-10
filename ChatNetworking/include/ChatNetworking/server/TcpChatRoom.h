@@ -22,12 +22,14 @@ namespace Chat {
 
         void GetUsers(std::vector<std::string> &users);
 
+        void Broadcast(const std::string& message);
 
     private:
         TCPChatRoom(std::string name, TCPConnection::pointer&& ptr);
     private:
         std::string _chatName;
         std::unordered_set<TCPConnection::pointer> _connections;
+
     };
 
 } // Chat
