@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
         std::string message;
         std::getline(std::cin, message);
 
-        if (message == "\\q") break;
+        if (message == "/q") break;
 
         message += '\n';
 

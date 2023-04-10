@@ -10,7 +10,7 @@ namespace Chat {
 
     TCPServer::TCPServer(IPV ipv, int port) : _ipVersion(ipv), _port(port),
     _acceptor(_ioContext,tcp::endpoint(_ipVersion == IPV::V4 ? tcp::v4() : tcp::v6(),_port)) {
-        _generalRoom = TCPChatRoom::createRoom("\\General\\");
+        _generalRoom = TCPChatRoom::createRoom("General");
         _chatRooms.emplace(_generalRoom);
     }
 
@@ -61,23 +61,28 @@ namespace Chat {
             _generalRoom->addConnection(connection);
             if (!error) {
                 connection->start(
-                        [this](const std::string &message)
-                        //TODO: Change function to work with chatRoom pointer
-                        { if (OnClientMessage) OnClientMessage(message); },
-                        [&, weak = std::weak_ptr(connection)] {
-                            //TODO: Make connections from chatrooms
+                        [this](const std::string &message, const std::weak_ptr<TCPChatRoom>& chatRoom)
+                        {
+                            auto shared = chatRoom.lock();
+                            if (OnClientMessage) OnClientMessage(message, shared);
+                            },
+                        [&, weak = std::weak_ptr(connection)](const std::weak_ptr<TCPChatRoom>& chatRoom) {
                             if (auto shared = weak.lock(); shared && _connections.erase(shared)) {
-                                if (OnLeave) OnLeave(shared);
+                                auto room = chatRoom.lock();
+                                if (OnLeave) OnLeave(shared, room);
                             }
                         },
-                        [this](const std::string &message, TCPConnection::pointer ptr) {
-                            //TODO: Change function to work with chatRoom pointer
-                            if (OnUsernameSet) OnUsernameSet(message, std::move(ptr));
+                        [this](const std::string &message, const std::weak_ptr<TCPChatRoom>& chatRoom) {
+                            auto shared = chatRoom.lock();
+                            if (OnUsernameSet) OnUsernameSet(message,shared);
                         },
                         [this]() {
                             std::vector<std::string> users{};
                             for (const auto &chatRoom: _chatRooms) chatRoom->GetUsers(users);
                             return users;
+                        },
+                        [this](std::string){
+
                         }
 
                 );
