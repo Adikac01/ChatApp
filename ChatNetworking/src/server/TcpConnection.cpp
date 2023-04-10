@@ -33,6 +33,7 @@ namespace Chat {
                          });
     }
 
+
     void TCPConnection::onUsernameSet() {
         std::string msg = "User " + _username + " has joined the chat!\n";
         _usernameHandler(msg, shared_from_this());
@@ -98,6 +99,8 @@ namespace Chat {
 
             }else if (cmd == "\\create_room"){
                 //TODO: Implement logic
+
+                TCPServer::makeNewRoom();
             }
             asyncRead();
         } else {

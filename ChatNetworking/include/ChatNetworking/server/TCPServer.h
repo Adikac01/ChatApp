@@ -9,6 +9,7 @@
 #include <vector>
 
 
+
 namespace Chat {
     enum class IPV {
         V4,
@@ -34,6 +35,8 @@ namespace Chat {
 
         void Broadcast(const std::string &message, const TCPChatRoom::pointer &ptr = nullptr);
 
+        [[maybe_unused]] void makeNewRoom(std::string name);
+
         OnJoinHandler OnJoin;
         OnLeaveHandler OnLeave;
         OnClientMessageHanler OnClientMessage;
@@ -52,6 +55,9 @@ namespace Chat {
         std::unordered_set<TCPConnection::pointer> _connections{};
         std::unordered_set<TCPChatRoom::pointer> _chatRooms{};
         TCPChatRoom::pointer _generalRoom;
+        TCPChatRoom::pointer _newRoom;
+
+
     };
 }//Chat
 

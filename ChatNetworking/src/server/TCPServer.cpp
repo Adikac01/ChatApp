@@ -14,6 +14,13 @@ namespace Chat {
         _chatRooms.emplace(_generalRoom);
     }
 
+    void TCPServer::makeNewRoom(std::string name)
+    {
+        _newRoom = TCPChatRoom::createRoom(name);
+        _chatRooms.emplace(_newRoom);
+
+    }
+
     int TCPServer::run() {
         try {
             startAccept();
