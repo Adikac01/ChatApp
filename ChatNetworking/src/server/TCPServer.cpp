@@ -81,8 +81,23 @@ namespace Chat {
                             for (const auto &chatRoom: _chatRooms) chatRoom->GetUsers(users);
                             return users;
                         },
-                        [this](std::string){
-
+                        [this](const std::string& name){
+                            _newRoom = TCPChatRoom::createRoom(name);
+                            _chatRooms.emplace(_newRoom);
+                            std::cout<<"room created "<<name;
+                        },[&,weak = std::weak_ptr(connection)](const std::string& name,const std::weak_ptr<TCPChatRoom>& chatRoom){
+                            auto weaker = weak.lock();
+                            auto shared = chatRoom.lock();
+                            if(shared) {
+                                shared->DelConnection(weaker);
+                            }
+                            for(const auto& room : _chatRooms)
+                            {
+                                if(room->getName()==name)
+                                {
+                                    room->addConnection(weaker);
+                                }
+                            }
                         }
 
                 );

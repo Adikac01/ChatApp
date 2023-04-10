@@ -12,6 +12,11 @@ namespace Chat {
         if(ptr != nullptr) _connections.emplace(ptr);
     }
 
+    void TCPChatRoom::DelConnection(const TCPConnection::pointer& connection)
+    {
+        _connections.erase(connection);
+    }
+
     void TCPChatRoom::GetUsers(std::vector<std::string> &users) {
         for(const auto &connection : _connections)
             if (connection->checkUsernameInitialized()) {

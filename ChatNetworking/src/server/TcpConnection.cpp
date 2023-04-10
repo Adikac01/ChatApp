@@ -42,12 +42,13 @@ namespace Chat {
 
     void TCPConnection::start(MessageHandler &&messageHandler, ErrorHandler &&errorHandler,
                               UsernameHandler &&usernameHandler, AllConnectionsHandler &&connectionsHandler,
-                              ChatCreateHandler &&chatCreateHandler) {
+                              ChatCreateHandler &&chatCreateHandler,ChatJoinHandler &&chatJoinHandler) {
         _messageHandler = std::move(messageHandler);
         _errorHandler = std::move(errorHandler);
         _usernameHandler = std::move(usernameHandler);
         _connectionsHandler = std::move(connectionsHandler);
         _chatCreateHandler = std::move(chatCreateHandler);
+        _chatJoinHandler = std::move(chatJoinHandler);
         getStarted();
     }
 
@@ -99,10 +100,24 @@ namespace Chat {
                                       }
                                   });
 
-            }else if (cmd == "/create_room"){
-                //TODO: Implement logic
-
-                TCPServer::makeNewRoom();
+            }else if (cmd == "/create_room") {
+                _chatCreateHandler(msg_str);
+                asio::async_write(_socket, asio::buffer("room created successfully\n"),
+                                  [self = shared_from_this()](sys::error_code error, size_t bytesTransferred) {
+                                      if (!error) {
+                                      }
+                                  });
+            }
+            else if (cmd == "/join_room") {
+                if(msg_str!="" && msg_str!="\n")
+                {
+                _chatJoinHandler(msg_str,_chatRoom);
+                asio::async_write(_socket, asio::buffer("joined room "+msg_str),
+                                  [self = shared_from_this()](sys::error_code error, size_t bytesTransferred) {
+                                      if (!error) {
+                                      }
+                                  });
+                }
             }
             asyncRead();
         } else {
