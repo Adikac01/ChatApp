@@ -21,6 +21,7 @@ namespace Chat {
         using MessageHandler = std::function<void(std::string,chatPointer)>;
         using ErrorHandler = std::function<void(const std::weak_ptr<TCPChatRoom>& chatRoom)>;
         using AllConnectionsHandler = std::function<std::vector<std::string>()>;
+        using ChatCreateHandler = std::function<void(std::string)>;
 
         static pointer Create(tcp::socket &&socket) {
             //return std::make_shared<TCPConnection>(ioContext);
@@ -35,7 +36,8 @@ namespace Chat {
 
 
         void start(MessageHandler &&messageHandler, ErrorHandler &&errorHandler,
-                   UsernameHandler &&usernameHandler, AllConnectionsHandler &&connectionsHandler);
+                   UsernameHandler &&usernameHandler, AllConnectionsHandler &&connectionsHandler,
+                   ChatCreateHandler &&chatCreateHandler);
 
         void post(const std::string &message);
 
@@ -76,6 +78,7 @@ namespace Chat {
         ErrorHandler _errorHandler;
         UsernameHandler _usernameHandler;
         AllConnectionsHandler _connectionsHandler;
+        ChatCreateHandler _chatCreateHandler;
 
 
     };

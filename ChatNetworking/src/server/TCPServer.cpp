@@ -73,6 +73,9 @@ namespace Chat {
                             std::vector<std::string> users{};
                             for (const auto &chatRoom: _chatRooms) chatRoom->GetUsers(users);
                             return users;
+                        },
+                        [this](std::string){
+
                         }
 
                 );

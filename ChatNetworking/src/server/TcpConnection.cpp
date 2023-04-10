@@ -40,11 +40,13 @@ namespace Chat {
     }
 
     void TCPConnection::start(MessageHandler &&messageHandler, ErrorHandler &&errorHandler,
-                              UsernameHandler &&usernameHandler, AllConnectionsHandler &&connectionsHandler) {
+                              UsernameHandler &&usernameHandler, AllConnectionsHandler &&connectionsHandler,
+                              ChatCreateHandler &&chatCreateHandler) {
         _messageHandler = std::move(messageHandler);
         _errorHandler = std::move(errorHandler);
         _usernameHandler = std::move(usernameHandler);
         _connectionsHandler = std::move(connectionsHandler);
+        _chatCreateHandler = std::move(chatCreateHandler);
         getStarted();
     }
 
@@ -75,11 +77,11 @@ namespace Chat {
         message << std::istream(&_streamBuf).rdbuf();
         std::string msg_str = message.str();
         std::string cmd;
-        int i = 0;
+        size_t i = 0;
         while(i < msg_str.size() -1 && msg_str[i] != ' ' && msg_str[i] != '\n'){
             cmd += msg_str[i++];
         }
-        msg_str = msg_str.substr(i, msg_str.size() - 2);
+        msg_str = msg_str.substr(std::min((i+1),(msg_str.size()-1)), std::max(i, msg_str.size() -2));
 
         if (cmd[0] == '/') {
             if (cmd == "/users") {

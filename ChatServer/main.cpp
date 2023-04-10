@@ -13,22 +13,20 @@ int main() {
     };
 
     server.OnLeave = [&server](const Chat::TCPConnection::pointer& client, const Chat::TCPChatRoom::pointer& chatRoom) {
-        //TODO: Fix function parameters
         std::cout << client->getUsername() << " has left the server\n";
         std::string msg = client->getUsername() + " has left the chat\n";
         server.Broadcast(msg, chatRoom);
     };
 
     server.OnClientMessage = [&server](const std::string &message, const Chat::TCPChatRoom::pointer & chatRoom) {
-        //TODO: Fix function parameters
         //Parse the messege
         server.Broadcast(message);
     };
 
     server.OnUsernameSet = [&server](const std::string &message, const Chat::TCPChatRoom::pointer &chatRoom) {
-        //TODO: Fix function parameters
         server.Broadcast(message, chatRoom);
     };
+
 
     server.run();
     return 0;
