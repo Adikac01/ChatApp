@@ -35,7 +35,7 @@ namespace Chat {
 
     void TCPConnection::onUsernameSet() {
         std::string msg = "User " + _username + " has joined the chat!\n";
-        _usernameHandler(msg, shared_from_this());
+        _usernameHandler(msg, _chatRoom);
         initializeName();
     }
 
@@ -68,7 +68,7 @@ namespace Chat {
         if (error) {
             _socket.close();
 
-            _errorHandler();
+            _errorHandler(_chatRoom);
             return;
         }
         std::stringstream message;
@@ -81,8 +81,8 @@ namespace Chat {
         }
         msg_str = msg_str.substr(i, msg_str.size() - 2);
 
-        if (cmd[0] == '\\') {
-            if (cmd == "\\users") {
+        if (cmd[0] == '/') {
+            if (cmd == "/users") {
                 std::vector<std::string> users = (_connectionsHandler());
 
                 std::string tmp = "List of users:\n";
@@ -96,7 +96,7 @@ namespace Chat {
                                       }
                                   });
 
-            }else if (cmd == "\\create_room"){
+            }else if (cmd == "/create_room"){
                 //TODO: Implement logic
             }
             asyncRead();
@@ -139,7 +139,7 @@ namespace Chat {
         if (error) {
             _socket.close();
 
-            _errorHandler();
+            _errorHandler(_chatRoom);
             return;
         }
         _outgoingMessages.pop();

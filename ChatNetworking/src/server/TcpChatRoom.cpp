@@ -16,8 +16,8 @@ namespace Chat {
         for(const auto &connection : _connections)
             if (connection->checkUsernameInitialized()) {
                 std::string user;
-                user += R"(\\\)" + this->getName() + ": ";
-                users.push_back(connection->getUsername());
+                user += R"(\\\)" + this->getName() + ": " + connection->getUsername();
+                users.push_back(user);
             }
     }
 

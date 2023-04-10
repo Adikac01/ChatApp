@@ -16,9 +16,10 @@ namespace Chat {
     class TCPConnection : public std::enable_shared_from_this<TCPConnection> {
     public:
         using pointer = std::shared_ptr<TCPConnection>;
-        using UsernameHandler = std::function<void(std::string, pointer)>;
-        using MessageHandler = std::function<void(std::string)>;
-        using ErrorHandler = std::function<void()>;
+        using chatPointer = std::weak_ptr<class TCPChatRoom>;
+        using UsernameHandler = std::function<void(std::string, chatPointer)>;
+        using MessageHandler = std::function<void(std::string,chatPointer)>;
+        using ErrorHandler = std::function<void(const std::weak_ptr<TCPChatRoom>& chatRoom)>;
         using AllConnectionsHandler = std::function<std::vector<std::string>()>;
 
         static pointer Create(tcp::socket &&socket) {

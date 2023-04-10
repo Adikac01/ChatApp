@@ -20,7 +20,7 @@ namespace Chat {
         using OnJoinHandler = std::function<void(TCPConnection::pointer)>;
         using OnLeaveHandler = std::function<void(TCPConnection::pointer, TCPChatRoom::pointer)>;
         using OnClientMessageHanler = std::function<void(std::string, TCPChatRoom::pointer)>;
-        using OnUsernameSetHandler = std::function<void(std::string, TCPConnection::pointer, TCPChatRoom::pointer)>;
+        using OnUsernameSetHandler = std::function<void(std::string, TCPChatRoom::pointer)>;
         using AllConnectionsHandler = std::function<std::vector<std::string>>;
 
     public:
