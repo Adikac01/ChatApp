@@ -84,8 +84,7 @@ namespace Chat {
         while(i < msg_str.size() -1 && msg_str[i] != ' ' && msg_str[i] != '\n'){
             cmd += msg_str[i++];
         }
-        msg_str = msg_str.substr(std::min((i+1),(msg_str.size()-1)), std::max(i, msg_str.size() -2));
-
+        msg_str = msg_str.substr(std::min((i+1),(msg_str.size()-1)), msg_str.size() - 2 - i);
         if (cmd[0] == '/') {
             if (cmd == "/users") {
                 std::vector<std::string> users = (_connectionsHandler());
@@ -112,12 +111,12 @@ namespace Chat {
             else if (cmd == "/join_room") {
                 if(!msg_str.empty() && msg_str!="\n")
                 {
-                this->_chatRoom = _chatJoinHandler(msg_str,_chatRoom);
-                asio::async_write(_socket, asio::buffer("joined room " + msg_str),
-                                  [self = shared_from_this()](sys::error_code error, size_t bytesTransferred) {
-                                      if (!error) {
-                                      }
-                                  });
+                    this->_chatRoom = _chatJoinHandler(msg_str,_chatRoom);
+                    asio::async_write(_socket, asio::buffer("joined room " + msg_str),
+                                      [self = shared_from_this()](sys::error_code error, size_t bytesTransferred) {
+                                          if (!error) {
+                                          }
+                                      });
                 }
             }
             asyncRead();
