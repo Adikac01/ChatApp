@@ -21,7 +21,7 @@ int main() {
 
     server.OnClientMessage = [&server](const std::string &message, const Chat::TCPChatRoom::pointer & chatRoom) {
         //Parse the messege
-        server.Broadcast(message);
+        server.Broadcast(message, chatRoom);
     };
 
     server.OnUsernameSet = [&server](const std::string &message, const Chat::TCPChatRoom::pointer &chatRoom) {

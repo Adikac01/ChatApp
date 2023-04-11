@@ -35,7 +35,7 @@ namespace Chat {
 
         void Broadcast(const std::string &message, const TCPChatRoom::pointer &ptr = nullptr);
 
-        [[maybe_unused]] void makeNewRoom(std::string name);
+        void makeNewRoom(std::string name);
 
         OnJoinHandler OnJoin;
         OnLeaveHandler OnLeave;

@@ -22,7 +22,7 @@ namespace Chat {
         using ErrorHandler = std::function<void(const std::weak_ptr<TCPChatRoom>& chatRoom)>;
         using AllConnectionsHandler = std::function<std::vector<std::string>()>;
         using ChatCreateHandler = std::function<void(std::string)>;
-        using ChatJoinHandler = std::function<void(std::string,const std::weak_ptr<TCPChatRoom>& chatRoom,std::weak_ptr<TCPChatRoom> &prev)>;
+        using ChatJoinHandler = std::function<chatPointer(std::string,const chatPointer& chatRoom)>;
 
 
 
@@ -49,8 +49,6 @@ namespace Chat {
         bool checkUsernameInitialized() const { return _usernameInitialized; }
 
         void initializeName() { _usernameInitialized = true;}
-
-        std::weak_ptr<Chat::TCPChatRoom> _general;
 
     private:
 

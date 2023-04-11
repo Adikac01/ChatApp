@@ -33,10 +33,10 @@ namespace Chat {
     }
 
     void TCPServer::Broadcast(const std::string& message, const TCPChatRoom::pointer &ptr) {
-        if(ptr == nullptr){
-            _generalRoom->Broadcast(message);
-        }else{
+        if(ptr) {
             ptr->Broadcast(message);
+        }else{
+            std::cout << ptr;
         }
     }
 
@@ -85,20 +85,27 @@ namespace Chat {
                             _newRoom = TCPChatRoom::createRoom(name);
                             _chatRooms.emplace(_newRoom);
                             std::cout<<"room created "<<name;
-                        },[&,weak = std::weak_ptr(connection)](const std::string& name,const std::weak_ptr<TCPChatRoom>& chatRoom,std::weak_ptr<TCPChatRoom> &prev){
+                        },[&,weak = std::weak_ptr(connection)](const std::string& name,
+                                        const std::weak_ptr<TCPChatRoom>& chatRoom){
+
                             auto weaker = weak.lock();
                             auto shared = chatRoom.lock();
-                            if(shared) {
-                                shared->DelConnection(weaker);
-                            }
+
+
                             for(const auto& room : _chatRooms)
                             {
                                 if(room->getName()==name)
                                 {
                                     room->addConnection(weaker);
-                                    prev=room;
+                                    //Delete connection from previous room only if we found another one;
+                                    if(shared) {
+                                        shared->DelConnection(weaker);
+                                    }
+                                    return std::weak_ptr(room);
                                 }
                             }
+                            //If room with that name wasn't found, return previous room pointer;
+                            return chatRoom;
                         }
 
                 );
