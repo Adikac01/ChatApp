@@ -22,11 +22,13 @@ namespace Chat {
         using ErrorHandler = std::function<void(const std::weak_ptr<TCPChatRoom>& chatRoom)>;
         using AllConnectionsHandler = std::function<std::vector<std::string>()>;
         using ChatCreateHandler = std::function<void(std::string)>;
-        using ChatJoinHandler = std::function<void(std::string,const std::weak_ptr<TCPChatRoom>& chatRoom)>;
+        using ChatJoinHandler = std::function<void(std::string,const std::weak_ptr<TCPChatRoom>& chatRoom,std::weak_ptr<TCPChatRoom> &prev)>;
 
-        static pointer Create(tcp::socket &&socket) {
+
+
+        static pointer Create(tcp::socket &&socket, std::weak_ptr<TCPChatRoom> weak) {
             //return std::make_shared<TCPConnection>(ioContext);
-            return pointer(new TCPConnection(std::move(socket)));
+            return pointer(new TCPConnection(std::move(socket),weak));
         }
 
         inline const std::string &getUsername() const { return _username; }
@@ -48,10 +50,11 @@ namespace Chat {
 
         void initializeName() { _usernameInitialized = true;}
 
+        std::weak_ptr<Chat::TCPChatRoom> _general;
 
     private:
 
-        explicit TCPConnection(tcp::socket &&socket);
+        explicit TCPConnection(tcp::socket &&socket, std::weak_ptr<TCPChatRoom> &weak);
 
         void asyncRead();
 
@@ -66,9 +69,11 @@ namespace Chat {
         void onUsernameSet();
 
 
+
     private:
         tcp::socket _socket;
         std::string _username;
+
         bool _usernameInitialized = false;
         std::weak_ptr<class TCPChatRoom> _chatRoom;
 
@@ -81,8 +86,6 @@ namespace Chat {
         AllConnectionsHandler _connectionsHandler;
         ChatCreateHandler _chatCreateHandler;
         ChatJoinHandler _chatJoinHandler;
-
-
     };
 } // Chat
 

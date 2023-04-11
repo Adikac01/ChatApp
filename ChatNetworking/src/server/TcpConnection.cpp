@@ -2,12 +2,14 @@
 #include "ChatNetworking/server/TcpConnection.h"
 
 
+
 namespace Chat {
-    TCPConnection::TCPConnection(tcp::socket &&socket) : _socket(std::move(socket)) {
+    TCPConnection::TCPConnection(tcp::socket &&socket,std::weak_ptr<TCPChatRoom> &weak) : _socket(std::move(socket)) {
         boost::system::error_code error;
         std::stringstream name;
         name << _socket.remote_endpoint();
         _username = name.str();
+        _general = weak;
     }
 
     void TCPConnection::getStarted() {
@@ -111,7 +113,8 @@ namespace Chat {
             else if (cmd == "/join_room") {
                 if(msg_str!="" && msg_str!="\n")
                 {
-                _chatJoinHandler(msg_str,_chatRoom);
+                _chatJoinHandler(msg_str,_general,_chatRoom);
+                this->_general=_chatRoom;
                 asio::async_write(_socket, asio::buffer("joined room "+msg_str),
                                   [self = shared_from_this()](sys::error_code error, size_t bytesTransferred) {
                                       if (!error) {
@@ -147,6 +150,7 @@ namespace Chat {
 
         }
     }
+
 
     void TCPConnection::asyncWrite() {
         asio::async_write(_socket, asio::buffer(_outgoingMessages.front()),

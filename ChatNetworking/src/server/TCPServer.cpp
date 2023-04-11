@@ -52,7 +52,7 @@ namespace Chat {
 
         //asynchronously accept a connection
         _acceptor.async_accept(*_socket, [this](const boost::system::error_code &error) {
-            auto connection = TCPConnection::Create(std::move(*_socket));
+            auto connection = TCPConnection::Create(std::move(*_socket),std::weak_ptr(_generalRoom));
             if (OnJoin) {
                 OnJoin(connection);
             }
@@ -85,7 +85,7 @@ namespace Chat {
                             _newRoom = TCPChatRoom::createRoom(name);
                             _chatRooms.emplace(_newRoom);
                             std::cout<<"room created "<<name;
-                        },[&,weak = std::weak_ptr(connection)](const std::string& name,const std::weak_ptr<TCPChatRoom>& chatRoom){
+                        },[&,weak = std::weak_ptr(connection)](const std::string& name,const std::weak_ptr<TCPChatRoom>& chatRoom,std::weak_ptr<TCPChatRoom> &prev){
                             auto weaker = weak.lock();
                             auto shared = chatRoom.lock();
                             if(shared) {
@@ -96,6 +96,7 @@ namespace Chat {
                                 if(room->getName()==name)
                                 {
                                     room->addConnection(weaker);
+                                    prev=room;
                                 }
                             }
                         }
