@@ -101,23 +101,33 @@ namespace Chat {
                                   });
 
             }else if (cmd == "/create_room") {
-                _chatCreateHandler(msg_str);
-                asio::async_write(_socket, asio::buffer("room created successfully\n"),
-                                  [self = shared_from_this()](sys::error_code error, size_t bytesTransferred) {
-                                      if (!error) {
-                                      }
-                                  });
+                std::string endMessage=_chatCreateHandler(msg_str) ? "room created successfully\n" : "room already exists\n";
+                asio::async_write(_socket, asio::buffer(endMessage),
+                                      [self = shared_from_this()](sys::error_code error, size_t bytesTransferred) {
+                                          if (!error) {
+                                          }
+                                      });
+
             }
             else if (cmd == "/join_room") {
                 if(!msg_str.empty() && msg_str!="\n")
                 {
-                    this->_chatRoom = _chatJoinHandler(msg_str,_chatRoom);
-                    asio::async_write(_socket, asio::buffer("joined room " + msg_str),
+                    this->_chatRoom = _chatJoinHandler(msg_str,_chatRoom, false);
+                    asio::async_write(_socket, asio::buffer("joined room " + msg_str+"\n"),
                                       [self = shared_from_this()](sys::error_code error, size_t bytesTransferred) {
                                           if (!error) {
                                           }
                                       });
                 }
+            }
+            else if (cmd == "/leave_room") {
+
+                    this->_chatRoom = _chatJoinHandler(msg_str,_chatRoom, true);
+                    asio::async_write(_socket, asio::buffer("leaved room\n"),
+                                      [self = shared_from_this()](sys::error_code error, size_t bytesTransferred) {
+                                          if (!error) {
+                                          }
+                                      });
             }
             asyncRead();
         } else {

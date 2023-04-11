@@ -82,19 +82,25 @@ namespace Chat {
                             return users;
                         },
                         [this](const std::string& name){
+                            for(auto room : _chatRooms){
+                                if(room->getName()==name) {
+                                    std::cout<<"room already exists\n";
+                                    return false;
+                                }
+                            }
                             _newRoom = TCPChatRoom::createRoom(name);
                             _chatRooms.emplace(_newRoom);
                             std::cout<<"room created "<<name;
+                            return true;
                         },[&,weak = std::weak_ptr(connection)](const std::string& name,
-                                        const std::weak_ptr<TCPChatRoom>& chatRoom){
+                                        const std::weak_ptr<TCPChatRoom>& chatRoom, bool isLeave){
 
                             auto weaker = weak.lock();
                             auto shared = chatRoom.lock();
 
-
                             for(const auto& room : _chatRooms)
                             {
-                                if(room->getName()==name)
+                                if(room->getName()==(isLeave ? "General" : name))
                                 {
                                     room->addConnection(weaker);
                                     //Delete connection from previous room only if we found another one;

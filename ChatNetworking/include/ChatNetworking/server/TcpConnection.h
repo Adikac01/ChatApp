@@ -21,8 +21,8 @@ namespace Chat {
         using MessageHandler = std::function<void(std::string,chatPointer)>;
         using ErrorHandler = std::function<void(const std::weak_ptr<TCPChatRoom>& chatRoom)>;
         using AllConnectionsHandler = std::function<std::vector<std::string>()>;
-        using ChatCreateHandler = std::function<void(std::string)>;
-        using ChatJoinHandler = std::function<chatPointer(std::string,const chatPointer& chatRoom)>;
+        using ChatCreateHandler = std::function<bool(std::string)>;
+        using ChatJoinHandler = std::function<chatPointer(std::string,const chatPointer& chatRoom,bool isLeave)>;
 
 
 
